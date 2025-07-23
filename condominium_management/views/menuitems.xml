@@ -1,0 +1,16 @@
+<odoo>
+  <data>
+    <!-- Menu items -->
+    <menuitem 
+      name="Condominium" 
+      id="condominium_management.menu_root"
+      web_icon="condominium_management,static/description/icon.png"
+    >
+        <menuitem
+            name="Condominiums"
+            id="condominium_management.menu_list"
+            action="condominium_management.action_condominium"
+      />
+    </menuitem>
+  </data>
+</odoo>

@@ -4,6 +4,7 @@ from odoo import models, fields
 class CondominiumProperty(models.Model):
     _name = "condominium.property"
     _description = "Propiedad de Condominio"
+    _inherit = ["portal.mixin", "mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(required=True)
     number = fields.Char()

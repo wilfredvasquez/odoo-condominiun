@@ -4,6 +4,7 @@ from odoo import models, fields
 class CondominiumEmployee(models.Model):
     _name = "condominium.employee"
     _description = "Empleado del Condominio"
+    _inherit = ["portal.mixin", "mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(required=True)
     condominium_id = fields.Many2one("condominium.condominium", required=True)
