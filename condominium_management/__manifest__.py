@@ -1,0 +1,14 @@
+{
+    "name": "Condominium Management",
+    "summary": "Manage condominium properties and units ",
+    "version": "18.0.1.0.1",
+    "category": "Condominium",
+    "author": "Wilfred Vásquez",
+    "license": "LGPL-3",
+    "installable": True,
+    "depends": ["base", "contacts"],
+    "data": [
+        "security/condominium.security.xml",
+        "security/ir.model.access.csv",
+    ],
+}

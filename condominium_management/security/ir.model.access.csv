@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_condominium_user,condominium.user,model_condominium_condominium,condominium_management.group_user,1,0,0,0
+access_condominium_manager,condominium.manager,model_condominium_condominium,condominium_management.group_manager,1,1,1,1
+access_property_user,property.user,model_condominium_property,condominium_management.group_user,1,0,0,0
+access_property_manager,property.manager,model_condominium_property,condominium_management.group_manager,1,1,1,1
+access_service_user,service.user,model_condominium_service,condominium_management.group_user,1,0,0,0
+access_service_manager,service.manager,model_condominium_service,condominium_management.group_manager,1,1,1,1
+access_employee_user,employee.user,model_condominium_employee,condominium_management.group_user,1,0,0,0
+access_employee_manager,employee.manager,model_condominium_employee,condominium_management.group_manager,1,1,1,1
