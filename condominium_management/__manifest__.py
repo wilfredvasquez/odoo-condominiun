@@ -6,11 +6,13 @@
     "author": "Wilfred Vásquez",
     "license": "LGPL-3",
     "installable": True,
+    "application": True,
     "depends": ["base", "contacts", "portal", "mail"],
     "data": [
         "security/condominium.security.xml",
         "security/ir.model.access.csv",
         "views/condominium.xml",
+        "views/property.xml",
         "views/menuitems.xml",
     ],
 }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree (list) view -->
+    <record id="view_property_list" model="ir.ui.view">
+        <field name="name">condominium_management.property.tree</field>
+        <field name="model">condominium.property</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="type"/>
+                <field name="owner_id"/>
+                <field name="tenant_id"/>
+                <field name="surface"/>
+                <field name="alicuota"/>
+                <field name="condominium_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_property_form" model="ir.ui.view">
+        <field name="name">condominium_management.property.form</field>
+        <field name="model">condominium.property</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    
+                </header>
+                <sheet>
+                    <div class="oe_title mb24 mt24">
+                        <h1>
+                            <field options="{'line_breaks': False}" widget="text" class="text-break" name="name" default_focus="1" placeholder="e.g. Condominio"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="basic_info" string="Basic Information">
+                            <field name="type" />
+                            <field name="tower" />
+                            <field name="floor" />
+                            <field name="surface" />
+                            <field name="alicuota" />
+                        </group>
+                        <group name="basic_info" string="Contact Information">
+                            <field name="owner_id" />
+                            <field name="tenant_id" />
+                            <field name="condominium_id" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Bills">
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="view_property_search" model="ir.ui.view">
+        <field name="name">condominium_management.property.search</field>
+        <field name="model">condominium.property</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="owner_id"/>
+                <field name="tenant_id"/>
+                <field name="condominium_id"/>
+                <separator/>
+                <filter string="Apartment" name="apartment" domain="[('type', '=', 'apartment')]"/>
+                <filter string="Commercial / Local" name="commercial" domain="[('type', '=', 'commercial')]"/>
+                <filter string="Other" name="other" domain="[('type', '=', 'other')]"/>
+                <separator/>
+                <group expand="0" name="group_by" string="Group By">
+                    <filter name="group_condominium" string="Condominium" context="{'group_by': 'condominium_id'}"/>
+                    <filter name="group_type" string="Property type" context="{'group_by': 'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+   <!-- Acción -->
+    <record id="action_property" model="ir.actions.act_window">
+        <field name="name">Property</field>
+        <field name="res_model">condominium.property</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_property_search"/>
+    </record>
+</odoo>
