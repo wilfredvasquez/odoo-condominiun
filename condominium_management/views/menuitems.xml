@@ -7,17 +7,28 @@
       web_icon="condominium_management,static/description/icon.png"
     >
       <menuitem
-        name="Condominiums"
-        id="condominium_management.menu_condominium_list"
-        action="condominium_management.action_condominium"
-      />
+        name="Condominium"
+        id="condominium_management.menu_condominiun_root"
+      >
+        <menuitem
+          name="Condominiums"
+          id="condominium_management.menu_condominium_list"
+          action="condominium_management.action_condominium"
+        />
+        <menuitem
+          name="Properties"
+          id="condominium_management.menu_property_list"
+          action="condominium_management.action_property"
+        />
+        <menuitem
+          name="Bills"
+          id="condominium_management.menu_bills"
+          action="condominium_management.action_bill"
+        >
+        </menuitem>
+      </menuitem>
       <menuitem
-        name="Properties"
-        id="condominium_management.menu_property_list"
-        action="condominium_management.action_property"
-      />
-      <menuitem
-        name="Services"
+        name="Settings"
         id="condominium_management.menu_settings"
       >
       </menuitem>

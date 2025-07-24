@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree (list) view -->
+    <record id="view_bill_list" model="ir.ui.view">
+        <field name="name">condominium_management.bill.tree</field>
+        <field name="model">condominium.bill</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="condominium_id"/>
+                <field name="date"/>
+                <field name="period"/>
+                <field name="due_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_bill_form" model="ir.ui.view">
+        <field name="name">condominium_management.bill.form</field>
+        <field name="model">condominium.bill</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_calculate_charges" type="object" string="Calculate Charges" invisible="state != 'draft'" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" options="{'clickable': True}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title mb24 mt24">
+                        <h1>
+                            <field options="{'line_breaks': False}" widget="text" class="text-break" name="name" default_focus="1" placeholder="e.g. Condominio"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="basic_info" string="Basic Information">
+                            <field name="condominium_id" />
+                            <field name="date" />
+                            <field name="period" />
+                            <field name="due_date" />
+                            <field name="amount" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="description"/>
+                                    <field name="total_amount"/>
+                                    <field name="how_applied"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Property Charges">
+                            <field name="unit_charge_ids" create="false" delete="false">
+                                <list>
+                                    <field name="property_name"/>
+                                    <field name="amount"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="view_bill_search" model="ir.ui.view">
+        <field name="name">condominium_management.bill.search</field>
+        <field name="model">condominium.bill</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="condominium_id"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Generated" name="generated" domain="[('state', '=', 'calculated')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <group expand="0" name="group_by" string="Group By">
+                    <filter name="group_condominium" string="Condominium" context="{'group_by': 'condominium_id'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+   <!-- Acción -->
+    <record id="action_bill" model="ir.actions.act_window">
+        <field name="name">Bill</field>
+        <field name="res_model">condominium.bill</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_bill_search"/>
+    </record>
+</odoo>

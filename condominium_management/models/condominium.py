@@ -1,10 +1,10 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class Condominium(models.Model):
     _name = "condominium.condominium"
     _description = "Condominium"
-    _inherit = ["portal.mixin", "mail.thread", "mail.activity.mixin"]
+    _inherit = ["portal.mixin", "mail.thread", "mail.activity.mixin", "avatar.mixin"]
 
     name = fields.Char(required=True)
     rif = fields.Char(string="RIF", required=True)
@@ -13,7 +13,6 @@ class Condominium(models.Model):
     address = fields.Text()
     phone = fields.Char()
     email = fields.Char()
-    image = fields.Image(string="Logo del Condominio")
     active = fields.Boolean(default=True)
 
     property_ids = fields.One2many(
@@ -25,3 +24,7 @@ class Condominium(models.Model):
     service_ids = fields.One2many(
         "condominium.service", "condominium_id", string="Servicios"
     )
+
+    @api.depends("name", "image_1920")
+    def _compute_avatar_1920(self):
+        super()._compute_avatar_1920()

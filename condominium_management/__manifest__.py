@@ -13,6 +13,7 @@
         "security/ir.model.access.csv",
         "views/condominium.xml",
         "views/property.xml",
+        "views/bill.xml",
         "views/menuitems.xml",
     ],
 }

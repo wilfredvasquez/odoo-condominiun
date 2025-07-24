@@ -7,3 +7,11 @@ access_service_user,service.user,model_condominium_service,condominium_managemen
 access_service_manager,service.manager,model_condominium_service,condominium_management.group_manager,1,1,1,1
 access_employee_user,employee.user,model_condominium_employee,condominium_management.group_user,1,0,0,0
 access_employee_manager,employee.manager,model_condominium_employee,condominium_management.group_manager,1,1,1,1
+access_bill_user,bill.user,model_condominium_bill,condominium_management.group_user,1,0,0,0
+access_bill_manager,bill.manager,model_condominium_bill,condominium_management.group_manager,1,1,1,1
+access_bill_line_user,bill.line.user,model_condominium_bill_line,condominium_management.group_user,1,0,0,0
+access_bill_line_manager,bill.line.manager,model_condominium_bill_line,condominium_management.group_manager,1,1,1,1
+access_property_charge_user,property.charge.user,model_condominium_property_charge,condominium_management.group_user,1,0,0,0
+access_property_charge_manager,property.charge.manager,model_condominium_property_charge,condominium_management.group_manager,1,1,1,1
+access_property_charge_detail_user,property.charge.detail.user,model_condominium_property_charge_detail,condominium_management.group_user,1,0,0,0
+access_property_charge_detail_manager,property.charge.detail.manager,model_condominium_property_charge_detail,condominium_management.group_manager,1,1,1,1
