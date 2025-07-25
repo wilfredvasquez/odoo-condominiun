@@ -15,6 +15,7 @@
         "views/property.xml",
         "views/bill.xml",
         "views/property_charge.xml",
+        "views/service.xml",
         "views/menuitems.xml",
     ],
 }

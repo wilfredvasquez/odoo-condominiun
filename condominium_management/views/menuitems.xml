@@ -9,6 +9,7 @@
       <menuitem
         name="Condominium"
         id="condominium_management.menu_condominiun_root"
+        sequence="10"
       >
         <menuitem
           name="Condominiums"
@@ -36,7 +37,14 @@
       <menuitem
         name="Settings"
         id="condominium_management.menu_settings"
+        groups="condominium_management.group_manager"
+        sequence="20"
       >
+        <menuitem
+          name="Default Services"
+          id="condominium_management.menu_default_services"
+          action="condominium_management.action_service"
+        />
       </menuitem>
     </menuitem>
   </data>
