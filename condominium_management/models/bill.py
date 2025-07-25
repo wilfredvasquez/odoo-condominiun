@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 
 
 class CondominiumBill(models.Model):
@@ -38,8 +39,16 @@ class CondominiumBill(models.Model):
         for rec in self:
             rec.amount = sum(line.total_amount for line in rec.line_ids)
 
+    def action_draft(self):
+        for bill in self:
+            if bill.state == "done":
+                raise UserError("Cannot revert a bill that is already done.")
+            
+            bill.state = "draft"
+
     def action_calculate_charges(self):
         for bill in self:
+            bill.unit_charge_ids.detail_lines.unlink()
             bill.unit_charge_ids.unlink()
             total_services = bill.line_ids
             units = bill.condominium_id.property_ids.filtered(lambda u: u.alicuota > 0)
@@ -85,60 +94,3 @@ class CondominiumBillLine(models.Model):
         default="alicuota",
     )
     total_amount = fields.Float(required=True)
-
-
-class CondominiumPropertyCharge(models.Model):
-    _name = "condominium.property.charge"
-    _description = "Condominium Property Charge"
-    _inherit = ["portal.mixin", "mail.thread", "mail.activity.mixin"]
-
-    name = fields.Char(compute="_compute_name", store=True)
-    bill_id = fields.Many2one("condominium.bill", required=True)
-    property_id = fields.Many2one("condominium.property", required=True)
-    property_name = fields.Char(related="property_id.name", store=True)
-    amount = fields.Float(required=True)
-    currency_id = fields.Many2one(
-        "res.currency", default=lambda self: self.env.company.currency_id
-    )
-
-    state = fields.Selection(
-        [
-            ("unpaid", "Pending"),
-            ("paid", "Paid"),
-            ("overdue", "Overdue"),
-        ],
-        default="unpaid",
-        string="Payment Status",
-    )
-
-    payment_date = fields.Date(string="Payment Date")
-    payment_method = fields.Char(string="Payment Method")
-    due_date = fields.Date(string="Due Date")
-
-    detail_lines = fields.One2many(
-        "condominium.property.charge.detail",
-        "property_charge_id",
-        string="Detail Lines",
-    )
-
-    def _compute_name(self):
-        for rec in self:
-            rec.name = f"{rec.property_name} - {rec.bill_id.name}"
-
-    def action_mark_as_paid(self):
-        for rec in self:
-            rec.write(
-                {
-                    "state": "paid",
-                    "payment_date": fields.Date.today(),
-                }
-            )
-
-
-class CondominiumUnitChargeDetail(models.Model):
-    _name = "condominium.property.charge.detail"
-    _description = "Detail of Property Charge"
-
-    property_charge_id = fields.Many2one("condominium.property.charge")
-    description = fields.Char()
-    amount = fields.Float()

@@ -22,7 +22,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_mark_as_paid" type="object" string="Mark as Paid" class="oe_highlight" invisible="state != 'unpaid'"/>
+                    <button name="action_mark_as_paid" type="object" string="Mark as Paid" class="oe_highlight" invisible="state == 'paid'"/>
+                    <button name="action_mark_as_overdue" type="object" string="Mark as Overdue"  invisible="state == 'overdue'"/>
+                    <button name="action_mark_as_unpaid" type="object" string="Mark as Unpaid"  invisible="state == 'unpaid'"/>
                     <field name="state" widget="statusbar"/> 
                 </header>
                 <sheet>

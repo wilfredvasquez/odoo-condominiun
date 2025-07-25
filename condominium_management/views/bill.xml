@@ -24,6 +24,7 @@
             <form>
                 <header>
                     <button name="action_calculate_charges" type="object" string="Calculate Charges" invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_draft" type="object" string="Set to Draft" invisible="state != 'calculated'"/>
                     <field name="state" widget="statusbar" options="{'clickable': True}"/>
                 </header>
                 <sheet>
