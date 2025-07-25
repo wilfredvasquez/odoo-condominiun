@@ -11,6 +11,7 @@
     "data": [
         "security/condominium.security.xml",
         "security/ir.model.access.csv",
+        "wizards/add_default_service.xml",
         "views/condominium.xml",
         "views/property.xml",
         "views/bill.xml",
