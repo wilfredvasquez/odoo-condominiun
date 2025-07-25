@@ -12,6 +12,7 @@
                 <field name="tenant_id"/>
                 <field name="surface"/>
                 <field name="alicuota"/>
+                <field name="total_debt" />
                 <field name="condominium_id"/>
             </list>
         </field>
@@ -44,10 +45,19 @@
                             <field name="owner_id" />
                             <field name="tenant_id" />
                             <field name="condominium_id" />
+                            <field name="total_debt" />
                         </group>
                     </group>
                     <notebook>
                         <page string="Bills">
+                            <field name="charge_ids" create="false" delete="false">
+                                <list>
+                                    <field name="bill_id"/>
+                                    <field name="due_date"/>
+                                    <field name="amount"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>

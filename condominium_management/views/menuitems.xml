@@ -26,6 +26,12 @@
           action="condominium_management.action_bill"
         >
         </menuitem>
+        <menuitem
+          name="Property Charges"
+          id="condominium_management.menu_property_charge"
+          action="condominium_management.action_property_charge"
+        >
+        </menuitem>
       </menuitem>
       <menuitem
         name="Settings"

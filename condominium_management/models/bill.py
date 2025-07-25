@@ -90,7 +90,9 @@ class CondominiumBillLine(models.Model):
 class CondominiumPropertyCharge(models.Model):
     _name = "condominium.property.charge"
     _description = "Condominium Property Charge"
+    _inherit = ["portal.mixin", "mail.thread", "mail.activity.mixin"]
 
+    name = fields.Char(compute="_compute_name", store=True)
     bill_id = fields.Many2one("condominium.bill", required=True)
     property_id = fields.Many2one("condominium.property", required=True)
     property_name = fields.Char(related="property_id.name", store=True)
@@ -118,6 +120,10 @@ class CondominiumPropertyCharge(models.Model):
         "property_charge_id",
         string="Detail Lines",
     )
+
+    def _compute_name(self):
+        for rec in self:
+            rec.name = f"{rec.property_name} - {rec.bill_id.name}"
 
     def action_mark_as_paid(self):
         for rec in self:
