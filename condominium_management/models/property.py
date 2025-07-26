@@ -27,20 +27,41 @@ class CondominiumProperty(models.Model):
     charge_ids = fields.One2many(
         "condominium.property.charge", "property_id", string="Receipt/Charges"
     )
+    previous_debt_ids = fields.One2many(
+        "condominium.property.previous.debt", 
+        "property_id", 
+        string="Previous Debts"
+    )
     total_debt = fields.Float(
         string="Total Debt",
         compute="_compute_total_debt",
         store=True,
     )
 
-    @api.depends("charge_ids.state", "charge_ids.amount")
+    charge_debt = fields.Float(
+        string="Charges Debt",
+        compute="_compute_total_debt",
+        store=True,
+    )
+
+    previous_debt_total = fields.Float(
+        string="Total Previous Debt",
+        compute="_compute_total_debt",
+        store=True,
+    )
+
+    @api.depends("charge_ids.state", "charge_ids.amount", "previous_debt_ids.amount")
     def _compute_total_debt(self):
         for rec in self:
-            rec.total_debt = sum(
+            rec.previous_debt_total = sum(
+                debt.amount for debt in rec.previous_debt_ids if not debt.paid
+            )
+            rec.charge_debt = sum(
                 charge.amount
                 for charge in rec.charge_ids
                 if charge.state in ["unpaid", "overdue"]
             )
+            rec.total_debt = rec.previous_debt_total + rec.charge_debt
 
 class CondominiumPropertyCharge(models.Model):
     _name = "condominium.property.charge"
@@ -106,3 +127,29 @@ class CondominiumUnitChargeDetail(models.Model):
     property_charge_id = fields.Many2one("condominium.property.charge")
     description = fields.Char()
     amount = fields.Float()
+
+
+class CondominiumPropertyPreviousDebt(models.Model):
+    _name = "condominium.property.previous.debt"
+    _description = "Deuda previa de propiedad"
+    _inherit = ["portal.mixin", "mail.thread", "mail.activity.mixin"]
+
+    name = fields.Char(compute="_compute_name", store=True)
+    property_id = fields.Many2one("condominium.property", required=True, string="Propiedad")
+    description = fields.Char(string="Descripción")
+    period = fields.Char(string="Periodo")  # Ejemplo: "Enero 2025"
+    amount = fields.Float(string="Monto", required=True)
+    paid = fields.Boolean(string="Pagado", default=False)
+
+    @api.depends("property_id.name", "description", "period", "amount", "paid")
+    def _compute_name(self):
+        for rec in self:
+            rec.name = f"Deuda previa de {rec.property_id.name} - {rec.period}"
+
+    def action_mark_as_paid(self):
+        for rec in self:
+            rec.write({"paid": True})
+    
+    def action_mark_as_unpaid(self):
+        for rec in self:
+            rec.write({"paid": False})

@@ -45,6 +45,10 @@
                             <field name="owner_id" />
                             <field name="tenant_id" />
                             <field name="condominium_id" />
+                        </group>
+                        <group name="financial_info" string="Financial Information">
+                            <field name="charge_debt" />
+                            <field name="previous_debt_total" />
                             <field name="total_debt" />
                         </group>
                     </group>
@@ -56,6 +60,16 @@
                                     <field name="due_date"/>
                                     <field name="amount"/>
                                     <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Previous Debts">
+                            <field name="previous_debt_ids" create="false" delete="false">
+                                <list>
+                                    <field name="description"/>
+                                    <field name="period"/>
+                                    <field name="amount"/>
+                                    <field name="paid"/>
                                 </list>
                             </field>
                         </page>

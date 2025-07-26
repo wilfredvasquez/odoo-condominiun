@@ -33,6 +33,12 @@
           action="condominium_management.action_property_charge"
         >
         </menuitem>
+        <menuitem
+          name="Property Previous Debts"
+          id="condominium_management.menu_property_previous_debt"
+          action="condominium_management.action_property_previous_debt"
+        >
+        </menuitem>
       </menuitem>
       <menuitem
         name="Settings"
