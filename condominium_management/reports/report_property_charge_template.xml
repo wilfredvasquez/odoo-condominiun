@@ -1,7 +1,7 @@
 <odoo>
   <template id="report_property_charge_document">
     <t t-call="web.basic_layout">
-      <t t-foreach="docs" t-as="charge">
+      <t t-foreach="docs" t-as="charge" t-index="charge_index">
         <div class="page" style="font-family: Arial, sans-serif; padding: 20px;">
           <!-- Header con Logo y Información del Condominio -->
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
@@ -83,13 +83,13 @@
               </tbody>
               <tfoot>
                 <tr style="background-color: #f8f9fa; font-weight: bold; font-size: 14px;">
-                  <td colspan="2" style="border: 1px solid #dee2e6; padding: 4px; text-align: center;">
+                  <td colspan="2" style="border: 1px solid #dee2e6; padding: 2px; text-align: center;">
                     *** TOTAL GASTOS COMUNES ***
                   </td>
-                  <td style="border: 1px solid #dee2e6; padding: 4px; text-align: right;">
+                  <td style="border: 1px solid #dee2e6; padding: 2px; text-align: right;">
                     <t t-esc="'{:,.2f}'.format(charge.bill_id.amount)"/>
                   </td>
-                  <td style="border: 1px solid #dee2e6; padding: 4px; text-align: right;">
+                  <td style="border: 1px solid #dee2e6; padding: 2px; text-align: right;">
                     <t t-esc="'{:,.2f}'.format(charge.amount)"/>
                   </td>
                 </tr>
@@ -122,8 +122,8 @@
                 </tbody>
                 <tfoot>
                   <tr style="background-color: #f8f9fa; font-weight: bold; font-size: 14px;">
-                    <td style="border: 1px solid #dee2e6; padding: 4px; text-align: center;">TOTAL...</td>
-                    <td style="border: 1px solid #dee2e6; padding: 4px; text-align: right;">
+                    <td style="border: 1px solid #dee2e6; padding: 2px; text-align: center;">TOTAL...</td>
+                    <td style="border: 1px solid #dee2e6; padding: 2px; text-align: right;">
                       <t t-esc="'{:,.2f}'.format(charge.property_id.previous_debt_total)"/>
                     </td>
                   </tr>
@@ -173,6 +173,11 @@
           </div>
           -->
         </div>
+        
+        <!-- Salto de página después de cada recibo (excepto el último) -->
+        <t t-if="charge_index != len(docs) - 1">
+          <div style="page-break-after: always;"></div>
+        </t>
       </t>
     </t>
   </template>
