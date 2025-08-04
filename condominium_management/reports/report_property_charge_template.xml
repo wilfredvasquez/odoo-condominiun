@@ -1,0 +1,208 @@
+<odoo>
+  <template id="report_property_charge_document">
+    <t t-call="web.basic_layout">
+      <t t-foreach="docs" t-as="charge">
+        <div class="page" style="font-family: Arial, sans-serif; padding: 20px;">
+          <!-- Header con Logo y Información del Condominio -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+            <div style="flex: 1;">
+              <!-- Logo y nombre en la misma línea -->
+              <div style="margin-bottom: 8px;">
+                <t t-if="charge.property_id.condominium_id.image_1920">
+                  <img t-att-src="image_data_uri(charge.property_id.condominium_id.image_1920)" 
+                       style="max-height: 30px; margin-right: 10px; object-fit: contain; vertical-align: middle;" 
+                       alt="Logotipo"/>
+                </t>
+                <span style="font-size: 18px; font-weight: bold; vertical-align: middle;">
+                  <t t-esc="charge.property_id.condominium_id.name"/>
+                </span>
+              </div>
+              <div style="font-size: 14px; color: #666;">
+                <strong>R.I.F.:</strong> <t t-esc="charge.property_id.condominium_id.rif"/>
+              </div>
+              <div style="font-size: 14px; color: #666;">
+                <strong>Dirección:</strong> <t t-esc="charge.property_id.condominium_id.address"/>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 14px; font-weight: bold">
+                Recibo: <t t-esc="charge.id"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información del Propietario -->
+          <div style="background-color: #f8f9fa; padding: 8px; margin-bottom: 10px; border-radius: 5px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+              <thead>
+                <th style="border-bottom: 1px solid #dee2e6; padding: 2px; text-align: center; width: 10%; font-weight: bold;">NRO.</th>
+                <th style="border-bottom: 1px solid #dee2e6; padding: 2px; text-align: center; width: 25%; font-weight: bold;">PROPIETARIO</th>
+                <th style="border-bottom: 1px solid #dee2e6; padding: 2px; text-align: center; width: 20%; font-weight: bold;">PERIODO</th>
+                <th style="border-bottom: 1px solid #dee2e6; padding: 2px; text-align: center; width: 20%; font-weight: bold;">ALICUOTA</th>
+                <th style="border-bottom: 1px solid #dee2e6; padding: 2px; text-align: center; width: 20%; font-weight: bold;">MONTO</th>
+              </thead>
+              <tr>
+                <td style="padding: 2px; text-align: center;"><t t-esc="charge.property_id.name"/></td>
+                <td style="padding: 2px; text-align: center;"><t t-esc="charge.property_id.owner_id.name or 'Sin propietario asignado'"/></td>
+                <td style="padding: 2px; text-align: center;"><t t-esc="charge.bill_id.period"/></td>
+                <td style="padding: 2px; text-align: center;">% <t t-esc="'{:.6f}'.format(charge.property_id.alicuota)"/></td>
+                <td style="padding: 2px; text-align: center;"><t t-esc="'{:,.2f}'.format(charge.amount)"/></td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Relación de Gastos del Mes -->
+          <div style="margin-bottom: 20px;">
+            <h5 style="text-align: center; color: #495057; font-size: 16px; font-weight: bold;">
+              RELACIÓN DE GASTOS DEL MES
+            </h5>
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;">
+              <thead>
+                <tr style="background-color: #e9ecef; font-size: 14px;">
+                  <th style="border: 1px solid #dee2e6; padding: 2px; text-align: center; width: 8%;">NRO.</th>
+                  <th style="border: 1px solid #dee2e6; padding: 2px; text-align: left; width: 52%;">DESCRIPCIÓN</th>
+                  <th style="border: 1px solid #dee2e6; padding: 2px; text-align: right; width: 20%;">G/COMUNES</th>
+                  <th style="border: 1px solid #dee2e6; padding: 2px; text-align: right; width: 20%; padding-right: 10px; ">MONTO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr t-foreach="charge.detail_lines" t-as="line" t-key="line.id">
+                  <td style="text-align: center; font-size: 14px;">
+                    <t t-esc="line.bill_line.id"/>
+                  </td>
+                  <td style="font-size: 14px;">
+                    <t t-esc="line.description"/>
+                  </td>
+                  <td style="text-align: right; font-size: 14px;">
+                    <t t-esc="'{:,.2f}'.format(line.bill_line.total_amount)"/>
+                  </td>
+                  <td style="text-align: right; font-size: 14px; padding-right: 10px;">
+                    <t t-esc="'{:,.2f}'.format(line.amount)"/>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr style="background-color: #f8f9fa; font-weight: bold; font-size: 14px;">
+                  <td colspan="2" style="border: 1px solid #dee2e6; padding: 4px; text-align: center;">
+                    *** TOTAL GASTOS COMUNES ***
+                  </td>
+                  <td style="border: 1px solid #dee2e6; padding: 4px; text-align: right;">
+                    <t t-esc="'{:,.2f}'.format(charge.bill_id.amount)"/>
+                  </td>
+                  <td style="border: 1px solid #dee2e6; padding: 4px; text-align: right;">
+                    <t t-esc="'{:,.2f}'.format(charge.amount)"/>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Cuotas Pendientes de Cobro -->
+          <t t-if="charge.property_id.previous_debt_total > 0">
+            <div style="margin-bottom: 20px;">
+              <h5 style="text-align: center; color: #495057; font-size: 16px; font-weight: bold;">
+                CUOTAS PENDIENTES DE COBRO
+              </h5>
+              <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6;">
+                <thead>
+                  <tr style="background-color: #e9ecef; font-size: 14px;">
+                    <th style="border: 1px solid #dee2e6; padding: 4px; text-align: center;">PERIODO</th>
+                    <th style="border: 1px solid #dee2e6; padding: 4px; text-align: right; padding-right: 10px;">MONTO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-foreach="charge.property_id.previous_debt_ids.filtered(lambda d: not d.paid)" t-as="debt" t-key="debt.id">
+                    <td style="text-align: center; font-size: 14px;">
+                      <t t-esc="debt.period"/>
+                    </td>
+                    <td style="text-align: right; font-size: 14px; padding-right: 10px;">
+                      <t t-esc="'{:,.2f}'.format(debt.amount)"/>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr style="background-color: #f8f9fa; font-weight: bold; font-size: 14px;">
+                    <td style="border: 1px solid #dee2e6; padding: 4px; text-align: center;">TOTAL...</td>
+                    <td style="border: 1px solid #dee2e6; padding: 4px; text-align: right;">
+                      <t t-esc="'{:,.2f}'.format(charge.property_id.previous_debt_total)"/>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </t>
+
+          <!-- Resumen de Pagos -->
+          <div style="background-color: #f8f9fa; padding: 12px; margin-bottom: 10px; border-radius: 5px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+              <tr>
+                <td style="font-weight: bold;">Total Gastos Comunes:</td>
+                <td style="text-align: right;">
+                  <t t-esc="'{:,.2f}'.format(charge.amount)"/>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Deuda Anterior:</td>
+                <td style="text-align: right;">
+                  <t t-esc="'{:,.2f}'.format(charge.property_id.previous_debt_total or 0.0)"/>
+                </td>
+              </tr>
+              <tr style="font-weight: bold; font-size: 14px; color: #dc3545;">
+                <td>TOTAL A PAGAR:</td>
+                <td style="text-align: right;">
+                  <t t-esc="'{:,.2f}'.format(charge.amount + (charge.property_id.previous_debt_total or 0.0))"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Instrucciones de Pago -->
+          <t t-if="charge.property_id.condominium_id.payment_instructions">
+            <div style="margin-bottom: 10px; padding: 12px; border: 1px solid #dee2e6; border-radius: 5px; background-color: #fff3cd;">
+              <h5 style="margin-bottom: 12px; color: #856404; font-size: 16px; font-weight: bold;">INSTRUCCIONES DE PAGO</h5>
+              <div t-field="charge.property_id.condominium_id.payment_instructions" style="font-size: 12px;" t-options='{"widget": "html"}'/>
+            </div>
+          </t>
+
+          <!-- Información Adicional -->
+          <!--
+          <div style="font-size: 12px; color: #6c757d; text-align: center; margin-top: 10px; border-top: 1px solid #dee2e6; padding-top: 12px;">
+            <p>Fecha de Emisión: <t t-esc="charge.bill_id.date"/></p>
+            <p>Fecha de Vencimiento: <t t-esc="charge.due_date"/></p>
+            <p>Estado: <t t-esc="dict(charge._fields['state'].selection).get(charge.state, charge.state)"/></p>
+          </div>
+          -->
+        </div>
+      </t>
+    </t>
+  </template>
+
+  <!-- Formato de papel personalizado para etiquetas de 4" x 2" -->
+        <record id="paperformat_label_carta" model="report.paperformat">
+            <field name="name">Carta</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="page_width">215</field>
+            <field name="page_height">279</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">100</field>
+        </record>
+
+  <record id="action_report_property_charge" model="ir.actions.report">
+    <field name="name">Receipt</field>
+    <field name="model">condominium.property.charge</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">condominium_management.report_property_charge_document</field>
+    <field name="report_file">condominium_management.report_property_charge_document</field>
+    <field name="print_report_name">('Receipt - %s - %s' % (object.property_id.name, object.bill_id.period))</field>
+    <field name="binding_model_id" ref="model_condominium_property_charge"/>
+    <field name="binding_type">report</field>
+    <field name="paperformat_id" ref="paperformat_label_carta"/>
+  </record>
+</odoo>

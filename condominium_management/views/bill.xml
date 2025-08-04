@@ -42,6 +42,12 @@
                         string="Add Default Services" 
                         class="oe_highlight"
                     />
+                    <button 
+                        name="action_print_all_charges" 
+                        type="object" 
+                        string="Print All Receipts" 
+                        class="btn-primary"
+                    />
                         
                     <field name="state" widget="statusbar" options="{'clickable': True}"/>
                 </header>

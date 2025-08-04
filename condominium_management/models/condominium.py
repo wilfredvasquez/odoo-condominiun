@@ -15,6 +15,12 @@ class Condominium(models.Model):
     email = fields.Char()
     active = fields.Boolean(default=True)
 
+    # Campo HTML para instrucciones de pago personalizables
+    payment_instructions = fields.Html(
+        string="Instrucciones de Pago",
+        help="Instrucciones de pago que aparecerán en el recibo",
+    )
+
     property_ids = fields.One2many(
         "condominium.property", "condominium_id", string="Propiedades"
     )

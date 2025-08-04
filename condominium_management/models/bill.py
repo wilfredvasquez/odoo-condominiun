@@ -67,7 +67,7 @@ class CondominiumBill(models.Model):
                         (
                             0,
                             0,
-                            {"description": line.description, "amount": service_share},
+                            {"bill_line": line.id, "amount": service_share},
                         )
                     )
                 self.env["condominium.property.charge"].create(
@@ -80,6 +80,10 @@ class CondominiumBill(models.Model):
                     }
                 )
             bill.state = "calculated"
+
+    def action_print_all_charges(self):
+        charges = self.mapped('unit_charge_ids')
+        return self.env.ref('condominium_management.action_report_property_charge').report_action(charges)
 
 
 class CondominiumBillLine(models.Model):

@@ -119,13 +119,17 @@ class CondominiumPropertyCharge(models.Model):
         for rec in self:
             rec.write({"state": "unpaid", "payment_date": False})
 
+    def action_print_receipt(self):
+        return self.env.ref('condominium_management.action_report_property_charge').report_action(self)
+
 
 class CondominiumUnitChargeDetail(models.Model):
     _name = "condominium.property.charge.detail"
     _description = "Detail of Property Charge"
 
     property_charge_id = fields.Many2one("condominium.property.charge")
-    description = fields.Char()
+    bill_line = fields.Many2one("condominium.bill.line", string="Bill Line")
+    description = fields.Char(related="bill_line.description", store=True)
     amount = fields.Float()
 
 

@@ -54,6 +54,9 @@
                         <page string="Employees">
                             <field name="employee_ids" />
                         </page>
+                        <page string="Payment Instructions">
+                            <field name="payment_instructions" widget="html"/>
+                        </page>
                     </notebook>
                 </sheet>
                 <chatter/>
