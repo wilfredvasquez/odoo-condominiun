@@ -47,6 +47,16 @@
                         type="object" 
                         string="Print All Receipts" 
                         class="btn-primary"
+                        invisible="not unit_charge_ids"
+                        help="Print all receipts for this bill"
+                    />
+                    <button 
+                        name="action_print_charges_by_property" 
+                        type="object" 
+                        string="Print Receipts (Sorted)" 
+                        class="btn-secondary"
+                        invisible="not unit_charge_ids"
+                        help="Print all receipts sorted by property name"
                     />
                         
                     <field name="state" widget="statusbar" options="{'clickable': True}"/>

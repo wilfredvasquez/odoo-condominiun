@@ -30,9 +30,7 @@ class CondominiumBill(models.Model):
     @api.depends("condominium_id", "date")
     def _compute_name(self):
         for rec in self:
-            rec.name = (
-                f"Receipt - {rec.date.strftime('%B %Y')}"
-            )
+            rec.name = f"Receipt - {rec.date.strftime('%B %Y')}"
 
     @api.depends("line_ids.total_amount")
     def _compute_amount(self):
@@ -43,7 +41,7 @@ class CondominiumBill(models.Model):
         for bill in self:
             if bill.state == "done":
                 raise UserError("Cannot revert a bill that is already done.")
-            
+
             bill.state = "draft"
 
     def action_calculate_charges(self):
@@ -82,8 +80,25 @@ class CondominiumBill(models.Model):
             bill.state = "calculated"
 
     def action_print_all_charges(self):
-        charges = self.mapped('unit_charge_ids')
-        return self.env.ref('condominium_management.action_report_property_charge').report_action(charges)
+        """Imprime todos los recibos de la factura"""
+        charges = self.mapped("unit_charge_ids")
+        if not charges:
+            raise UserError("No hay recibos generados para imprimir.")
+        return self.env.ref(
+            "condominium_management.action_report_property_charge"
+        ).report_action(charges)
+
+    def action_print_charges_by_property(self):
+        """Imprime recibos agrupados por propiedad"""
+        charges = self.mapped("unit_charge_ids")
+        if not charges:
+            raise UserError("No hay recibos generados para imprimir.")
+
+        # Agrupar por propiedad para mejor organización
+        charges_by_property = charges.sorted(lambda c: c.property_id.name)
+        return self.env.ref(
+            "condominium_management.action_report_property_charge"
+        ).report_action(charges_by_property)
 
 
 class CondominiumBillLine(models.Model):
